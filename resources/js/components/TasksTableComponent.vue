@@ -1,5 +1,5 @@
 <template>
-  <table class="table table-hover table-striped">
+  <table class="table table-hover table-striped table-dark">
     <thead>
       <tr>
         <th>ID</th>
@@ -12,10 +12,14 @@
         <td width="10px">{{ keep.id }}</td>
         <td>{{ keep.keep }}</td>
         <td>
-          <a href="#" class="btn btn-warning btn-small">Editar</a>
+          <a href="#" class="btn btn-outline-warning btn-small">Editar</a>
         </td>
         <td>
-          <a href="#" class="btn btn-danger btn-small" @click.prevent="deleteKeep(keep)">Eliminar</a>
+          <a
+            href="#"
+            class="btn btn-outline-danger btn-small"
+            @click.prevent="deleteKeep(keep)"
+          >Eliminar</a>
         </td>
       </tr>
     </tbody>
@@ -29,7 +33,9 @@ export default {
   },
   data() {
     return {
-      keeps: []
+      keeps: [],
+      newKeep: "",
+      error: []
     };
   },
   methods: {
@@ -62,6 +68,23 @@ export default {
         })
         .catch(err => {
           console.log(err);
+        });
+    },
+    createKeep() {
+      const URL_CREATE_KEEP = `tasks`;
+      axios
+        .post(URL_CREATE_KEEP, {
+          keep: this.newKeep
+        })
+        .then(res => {
+          this.getKeeps();
+          this.newKeep = "";
+          this.errors = [];
+          $("#create").modal("hide");
+          this.$swal("Nueva Tarea creada con éxito!!", "Haz click en el botón para continuar.", "success");
+        })
+        .catch(err => {
+          this.errors = err.response.data
         });
     }
   }
