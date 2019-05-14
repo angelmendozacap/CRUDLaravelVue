@@ -7,11 +7,12 @@
     </div>
     <div class="col-12">
       <div class="mb-3 d-flex justify-content-end">
-        <a href="" class="btn btn-primary">Nueva Tarea</a>
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#create">Nueva Tarea</button>
       </div>
       <div class="table-responsive">
         <tasks-table></tasks-table>
       </div>
     </div>
+    @include('create')
   </div>
 @endsection
