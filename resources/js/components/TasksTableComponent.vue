@@ -51,6 +51,14 @@ export default {
         .delete(URL_DELETE_KEEP)
         .then(res => {
           this.getKeeps();
+          this.$swal.fire({
+            position: "top-end",
+            type: "success",
+            title: "Eliminado correctamente",
+            showConfirmButton: false,
+            toast: true,
+            timer: 2500
+          });
         })
         .catch(err => {
           console.log(err);

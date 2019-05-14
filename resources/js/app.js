@@ -5,9 +5,16 @@
  */
 
 require('./bootstrap');
+import VueSweetalert2 from 'vue-sweetalert2'
 
 window.Vue = require('vue');
 
+const options = {
+  confirmButtonColor: '#41b882',
+  cancelButtonColor: '#ff7674'
+}
+
+Vue.use(VueSweetalert2, options)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
