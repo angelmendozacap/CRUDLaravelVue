@@ -15,7 +15,7 @@
           <a href="#" class="btn btn-warning btn-small">Editar</a>
         </td>
         <td>
-          <a href="#" class="btn btn-danger btn-small">Eliminar</a>
+          <a href="#" class="btn btn-danger btn-small" @click.prevent="deleteKeep(keep)">Eliminar</a>
         </td>
       </tr>
     </tbody>
@@ -24,22 +24,33 @@
 
 <script>
 export default {
-  created () {
-    this.getKeeps()
+  created() {
+    this.getKeeps();
   },
-  data () {
+  data() {
     return {
       keeps: []
-    }
+    };
   },
   methods: {
     getKeeps() {
-      const urlKeeps = "tasks";
+      const URL_GET_KEEPS = "tasks";
       axios
-        .get(urlKeeps)
+        .get(URL_GET_KEEPS)
         .then(res => {
           this.keeps = res.data;
-          console.log(this.keeps)
+          console.log(this.keeps);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    deleteKeep(keep) {
+      const URL_DELETE_KEEP = `tasks/${keep.id}`;
+      axios
+        .delete(URL_DELETE_KEEP)
+        .then(res => {
+          this.getKeeps();
         })
         .catch(err => {
           console.log(err);
