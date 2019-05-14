@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Task;
 use Illuminate\Http\Request;
+use App\Http\Resources\Task as TaskResource;
 
 class TaskController extends Controller
 {
@@ -14,7 +15,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        // $tasks = TaskResource::collection(Task::all());
+        $tasks = Task::all();
+        return $tasks;
     }
 
     /**
@@ -24,7 +27,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        // Formulario
     }
 
     /**
@@ -55,9 +58,11 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function edit(Task $task)
+    public function edit($id)
     {
-        //
+        $task = Task::findOrFail($id);
+        // Formulario
+        return $task;
     }
 
     /**
@@ -78,8 +83,9 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy($id)
     {
-        //
+        $task = Task::findOrFail($id);
+        $task->delete();
     }
 }
