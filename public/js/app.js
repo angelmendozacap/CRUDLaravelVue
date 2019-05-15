@@ -1806,6 +1806,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     deleteKeep: function deleteKeep(keep) {
       this.$emit('delete-keep', keep);
+    },
+    updateKeep: function updateKeep(keep) {
+      this.$emit('update-keep', keep);
     }
   }
 });
@@ -37781,7 +37784,22 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(keep.keep))]),
             _vm._v(" "),
-            _vm._m(1, true),
+            _c("td", [
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-outline-warning btn-small",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.updateKeep(keep)
+                    }
+                  }
+                },
+                [_vm._v("Editar")]
+              )
+            ]),
             _vm._v(" "),
             _c("td", [
               _c(
@@ -37819,21 +37837,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { colspan: "2" } }, [_vm._v(" ")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-outline-warning btn-small",
-          attrs: { href: "#" }
-        },
-        [_vm._v("Editar")]
-      )
     ])
   }
 ]
@@ -50079,6 +50082,10 @@ var app = new Vue({
   data: {
     newKeep: "",
     errors: [],
+    fillKeep: {
+      'id': '',
+      'keep': ''
+    },
     keeps: []
   },
   created: function created() {
@@ -50091,37 +50098,74 @@ var app = new Vue({
       var URL_GET_KEEPS = "tasks";
       axios.get(URL_GET_KEEPS).then(function (res) {
         _this.keeps = res.data;
-        console.log(_this.keeps);
       })["catch"](function (err) {
         console.log(err);
       });
     },
-    createKeep: function createKeep() {
+    editKeep: function editKeep(keep) {
+      this.fillKeep.id = keep.id;
+      this.fillKeep.keep = keep.keep;
+      $('#edit').modal('show');
+    },
+    updateKeep: function updateKeep(id) {
       var _this2 = this;
+
+      var URL_UPDATE_KEEPS = "tasks/".concat(id);
+      axios.put(URL_UPDATE_KEEPS, this.fillKeep).then(function (res) {
+        _this2.getKeeps();
+
+        _this2.fillKeep = {
+          'id': '',
+          'keep': ''
+        };
+        _this2.errors = [];
+        $('#edit').modal('hide');
+
+        _this2.$swal.fire({
+          position: "top-end",
+          type: "success",
+          title: "Tarea actualizada con Éxito",
+          showConfirmButton: false,
+          toast: true,
+          timer: 2500
+        });
+      })["catch"](function (err) {
+        _this2.errors = err.response.data;
+      });
+    },
+    createKeep: function createKeep() {
+      var _this3 = this;
 
       var URL_CREATE_KEEP = "tasks";
       axios.post(URL_CREATE_KEEP, {
         keep: this.newKeep
       }).then(function (res) {
-        _this2.getKeeps();
+        _this3.getKeeps();
 
-        _this2.newKeep = "";
-        _this2.errors = [];
+        _this3.newKeep = "";
+        _this3.errors = [];
         $("#create").modal("hide");
 
-        _this2.$swal("Nueva Tarea creada con éxito!!", "Haz click en el botón para continuar.", "success");
+        _this3.$swal.fire({
+          position: "top-end",
+          type: "success",
+          title: "Tarea creada con Éxito",
+          showConfirmButton: false,
+          toast: true,
+          timer: 2500
+        });
       })["catch"](function (err) {
-        _this2.errors = err.response.data;
+        _this3.errors = err.response.data;
       });
     },
     deleteKeep: function deleteKeep(keep) {
-      var _this3 = this;
+      var _this4 = this;
 
       var URL_DELETE_KEEP = "tasks/".concat(keep.id);
       axios["delete"](URL_DELETE_KEEP).then(function (res) {
-        _this3.getKeeps();
+        _this4.getKeeps();
 
-        _this3.$swal.fire({
+        _this4.$swal.fire({
           position: "top-end",
           type: "success",
           title: "Eliminado correctamente",
