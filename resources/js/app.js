@@ -39,6 +39,7 @@ const app = new Vue({
   data: {
     newKeep: "",
     errors: [],
+    fillKeep: { 'id': '', 'keep': '' },
     keeps: []
   },
   created() {
@@ -51,10 +52,34 @@ const app = new Vue({
         .get(URL_GET_KEEPS)
         .then(res => {
           this.keeps = res.data;
-          console.log(this.keeps);
         })
         .catch(err => {
           console.log(err);
+        });
+    },
+    editKeep(keep) {
+      this.fillKeep.id = keep.id
+      this.fillKeep.keep = keep.keep
+      $('#edit').modal('show')
+    },
+    updateKeep(id) {
+      const URL_UPDATE_KEEPS = `tasks/${id}`
+      axios.put(URL_UPDATE_KEEPS, this.fillKeep)
+        .then((res) => {
+          this.getKeeps();
+          this.fillKeep = { 'id': '', 'keep': '' }
+          this.errors = []
+          $('#edit').modal('hide')
+          this.$swal.fire({
+            position: "top-end",
+            type: "success",
+            title: "Tarea actualizada con Éxito",
+            showConfirmButton: false,
+            toast: true,
+            timer: 2500
+          });
+        }).catch((err) => {
+          this.errors = err.response.data
         });
     },
     createKeep() {
@@ -68,7 +93,14 @@ const app = new Vue({
           this.newKeep = "";
           this.errors = [];
           $("#create").modal("hide");
-          this.$swal("Nueva Tarea creada con éxito!!", "Haz click en el botón para continuar.", "success");
+          this.$swal.fire({
+            position: "top-end",
+            type: "success",
+            title: "Tarea creada con Éxito",
+            showConfirmButton: false,
+            toast: true,
+            timer: 2500
+          });
         })
         .catch(err => {
           this.errors = err.response.data

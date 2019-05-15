@@ -12,7 +12,7 @@
         <td width="10px">{{ keep.id }}</td>
         <td>{{ keep.keep }}</td>
         <td>
-          <a href="#" class="btn btn-outline-warning btn-small">Editar</a>
+          <a href="#" class="btn btn-outline-warning btn-small" @click.prevent="updateKeep(keep)">Editar</a>
         </td>
         <td>
           <a
@@ -45,6 +45,9 @@ export default {
   methods: {
     deleteKeep(keep) {
       this.$emit('delete-keep', keep)
+    },
+    updateKeep(keep) {
+      this.$emit('update-keep', keep)
     }
   }
 };
