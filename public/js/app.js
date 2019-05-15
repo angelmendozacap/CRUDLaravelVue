@@ -1792,64 +1792,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  created: function created() {
-    this.getKeeps();
+  props: {
+    keeps: {
+      type: Array,
+      required: true
+    }
+  },
+  created: function created() {// this.getKeeps();
   },
   data: function data() {
-    return {
-      keeps: [],
-      newKeep: "",
-      error: []
-    };
+    return {};
   },
   methods: {
-    getKeeps: function getKeeps() {
-      var _this = this;
-
-      var URL_GET_KEEPS = "tasks";
-      axios.get(URL_GET_KEEPS).then(function (res) {
-        _this.keeps = res.data;
-        console.log(_this.keeps);
-      })["catch"](function (err) {
-        console.log(err);
-      });
-    },
     deleteKeep: function deleteKeep(keep) {
-      var _this2 = this;
-
-      var URL_DELETE_KEEP = "tasks/".concat(keep.id);
-      axios["delete"](URL_DELETE_KEEP).then(function (res) {
-        _this2.getKeeps();
-
-        _this2.$swal.fire({
-          position: "top-end",
-          type: "success",
-          title: "Eliminado correctamente",
-          showConfirmButton: false,
-          toast: true,
-          timer: 2500
-        });
-      })["catch"](function (err) {
-        console.log(err);
-      });
-    },
-    createKeep: function createKeep() {
-      var _this3 = this;
-
-      var URL_CREATE_KEEP = "tasks";
-      axios.post(URL_CREATE_KEEP, {
-        keep: this.newKeep
-      }).then(function (res) {
-        _this3.getKeeps();
-
-        _this3.newKeep = "";
-        _this3.errors = [];
-        $("#create").modal("hide");
-
-        _this3.$swal("Nueva Tarea creada con éxito!!", "Haz click en el botón para continuar.", "success");
-      })["catch"](function (err) {
-        _this3.errors = err.response.data;
-      });
+      this.$emit('delete-keep', keep);
     }
   }
 });
@@ -50119,7 +50075,65 @@ Vue.component('tasks-table', __webpack_require__(/*! ./components/TasksTableComp
  */
 
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: {
+    newKeep: "",
+    errors: [],
+    keeps: []
+  },
+  created: function created() {
+    this.getKeeps();
+  },
+  methods: {
+    getKeeps: function getKeeps() {
+      var _this = this;
+
+      var URL_GET_KEEPS = "tasks";
+      axios.get(URL_GET_KEEPS).then(function (res) {
+        _this.keeps = res.data;
+        console.log(_this.keeps);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    createKeep: function createKeep() {
+      var _this2 = this;
+
+      var URL_CREATE_KEEP = "tasks";
+      axios.post(URL_CREATE_KEEP, {
+        keep: this.newKeep
+      }).then(function (res) {
+        _this2.getKeeps();
+
+        _this2.newKeep = "";
+        _this2.errors = [];
+        $("#create").modal("hide");
+
+        _this2.$swal("Nueva Tarea creada con éxito!!", "Haz click en el botón para continuar.", "success");
+      })["catch"](function (err) {
+        _this2.errors = err.response.data;
+      });
+    },
+    deleteKeep: function deleteKeep(keep) {
+      var _this3 = this;
+
+      var URL_DELETE_KEEP = "tasks/".concat(keep.id);
+      axios["delete"](URL_DELETE_KEEP).then(function (res) {
+        _this3.getKeeps();
+
+        _this3.$swal.fire({
+          position: "top-end",
+          type: "success",
+          title: "Eliminado correctamente",
+          showConfirmButton: false,
+          toast: true,
+          timer: 2500
+        });
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
+  }
 });
 
 /***/ }),

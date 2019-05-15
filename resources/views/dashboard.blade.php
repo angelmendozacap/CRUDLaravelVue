@@ -10,7 +10,7 @@
         <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#create">Nueva Tarea</button>
       </div>
       <div class="table-responsive">
-        <tasks-table></tasks-table>
+        <tasks-table :keeps="keeps" @delete-keep="deleteKeep"></tasks-table>
       </div>
     </div>
     @include('create')

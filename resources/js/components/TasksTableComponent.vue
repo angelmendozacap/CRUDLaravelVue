@@ -28,64 +28,23 @@
 
 <script>
 export default {
+  props: {
+    keeps: {
+      type: Array,
+      required: true,
+    }
+  },
   created() {
-    this.getKeeps();
+    // this.getKeeps();
   },
   data() {
     return {
-      keeps: [],
-      newKeep: "",
-      error: []
+
     };
   },
   methods: {
-    getKeeps() {
-      const URL_GET_KEEPS = "tasks";
-      axios
-        .get(URL_GET_KEEPS)
-        .then(res => {
-          this.keeps = res.data;
-          console.log(this.keeps);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
     deleteKeep(keep) {
-      const URL_DELETE_KEEP = `tasks/${keep.id}`;
-      axios
-        .delete(URL_DELETE_KEEP)
-        .then(res => {
-          this.getKeeps();
-          this.$swal.fire({
-            position: "top-end",
-            type: "success",
-            title: "Eliminado correctamente",
-            showConfirmButton: false,
-            toast: true,
-            timer: 2500
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    createKeep() {
-      const URL_CREATE_KEEP = `tasks`;
-      axios
-        .post(URL_CREATE_KEEP, {
-          keep: this.newKeep
-        })
-        .then(res => {
-          this.getKeeps();
-          this.newKeep = "";
-          this.errors = [];
-          $("#create").modal("hide");
-          this.$swal("Nueva Tarea creada con éxito!!", "Haz click en el botón para continuar.", "success");
-        })
-        .catch(err => {
-          this.errors = err.response.data
-        });
+      this.$emit('delete-keep', keep)
     }
   }
 };
