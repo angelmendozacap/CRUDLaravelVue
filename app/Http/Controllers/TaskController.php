@@ -43,9 +43,14 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'keep' => 'required'
+        ]);
+
+        Task::find($id)->update($request->all());
+        return;
     }
 
     /**
